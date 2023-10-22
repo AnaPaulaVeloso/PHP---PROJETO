@@ -6,9 +6,6 @@ if (!isset($_SESSION['admin'])) {
     exit;
 }
 
-/* AJUSTE SUA CONEXÃO AQUI E DESCOMENTE ESSE BLOCO
-
-// Conexão ao banco de dados usando PDO (substitua com suas configurações)
 $db = new PDO('mysql:host=localhost;dbname=produto', 'root', '');
 
 if (isset($_POST['create'])) {
@@ -28,7 +25,7 @@ if (isset($_POST['delete'])) {
 
 $products = $db->query("SELECT * FROM produtos")->fetchAll();
 
-ATÉ AQUI! */ 
+
 ?>
 
 <!DOCTYPE html>

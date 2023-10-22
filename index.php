@@ -21,68 +21,52 @@ if (isset($_POST['login'])) {
     }
 }
 ?>
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Login Page</title>
-   <!--Made with love by Mutiullah Samim -->
-   <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<!--Bootsrap 4 CDN-->
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    
-    <!--Fontawesome CDN-->
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 
-	<!--Custom styles-->
-	<link rel="stylesheet" type="text/css" href="/css/style.css">
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://kit.fontawesome.com/cf6fa412bd.js" crossorigin="anonymous"></script>
 </head>
 <body>
-<div class="container">
-	<div class="d-flex justify-content-center h-100">
-		<div class="card">
-			<div class="card-header">
-				<h3>Sign In</h3>
-				<div class="d-flex justify-content-end social_icon">
-					<span><i class="fab fa-facebook-square"></i></span>
-					<span><i class="fab fa-google-plus-square"></i></span>
-					<span><i class="fab fa-twitter-square"></i></span>
-				</div>
-			</div>
-			<div class="card-body">
-				<form action="index.php" method="POST">
-					<div class="input-group form-group">
-						<div class="input-group-prepend">
-							<span class="input-group-text"><i class="fas fa-user"></i></span>
-						</div>
-						<input type="text" class="form-control" name="username" placeholder="username">
-						
-					</div>
-					<div class="input-group form-group">
-						<div class="input-group-prepend">
-							<span class="input-group-text"><i class="fas fa-key"></i></span>
-						</div>
-						<input type="password" class="form-control" name="password" placeholder="password">
-					</div>
-					<div class="row align-items-center remember">
-						<input name="lembrar" type="checkbox">Remember Me
-					</div>
-					<div class="form-group">
-						<input type="submit" value="Login" name="login" class="btn float-right login_btn">
-					</div>
-				</form>
-			</div>
-			<div class="card-footer">
-				<div class="d-flex justify-content-center links">
-					Don't have an account?<a href="#">Sign Up</a>
-				</div>
-				<div class="d-flex justify-content-center">
-					<a href="#">Forgot your password?</a>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+  <div class="container">
+    <div class="buttonsForm">
+      <div class="btnColor"></div>
+      <button id="btnEntrar">Entrar</button>
+      <button id="btnCadastro">Cadastre-se</button>
+    </div>
+
+    <form action="index.php" method="POST" id="entrar">
+      <input type="text" placeholder="Email" required />
+      <i class="fas fa-envelope iEmail"></i>
+      <input type="password" placeholder="Password" required />
+      <i class="fas fa-lock senha"></i>
+      <div class="divCheck">
+        <input type="checkbox" />
+        <span>Lembrar Login</span>
+      </div>
+      <button type="submit">Entrar</button>
+    </form>
+
+    <form action="login.php" method="POST" id="cadastro">
+      <input type="text" placeholder="Email" required />
+      <i class="fas fa-envelope iEmail"></i>
+      <input type="password" placeholder="Password" required />
+      <i class="fas fa-lock senha"></i>
+      <input type="password" placeholder="Password" required />
+      <i class="fas fa-lock senha2"></i>
+      <div class="divCheck">
+        <input type="checkbox" required />
+        <span>Aceitar termos de privacidade</span>
+      </div>
+      <button type="submit">Cadastre-se</button>
+    </form>
+  </div>
+
+  <script src="login.js"></script>
 </body>
 </html>
