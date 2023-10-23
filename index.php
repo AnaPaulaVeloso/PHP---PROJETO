@@ -24,21 +24,30 @@ if (isset($_POST['entrar'])) {
 
 
 <?php 
-  if (!empty($_POST['btncadastro'])){
+  if (isset($_POST['btncadastro'])) {
+    $usuario = $_POST['txtusuario'];
     $email = $_POST['txtemail'];
     $senha = $_POST['txtsenha'];
-    try{
-      include 'conexao.php';
-      $sql = "INSERT INTO usuario(nm_usuario, nm_email, cd_senha)
-      VALUES ('$email', '$senha');";
-      $conn->exec($sql);
-      echo "<script>alert('Cadastrado com Sucesso!');</script>"; 
-    }catch(PDOException $e ){
-    echo $sql . "<br>" . $e->getMessage();
-  }
-  $conn = null;
-  }
+    $senha_confirm = $_POST['txtsenha_confirm'];
 
+    if ($senha === $senha_confirm) {
+        $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
+
+        try {
+            include 'conexao.php';
+            $sql = "INSERT INTO usuario(nm_usuario, nm_email, cd_senha)
+                    VALUES (?, ?, ?);";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute([$usuario, $email, $senha_hash]);
+            echo "<script>alert('Cadastrado com Sucesso!');</script>";
+        } catch (PDOException $e) {
+            echo $sql . "<br>" . $e->getMessage();
+        }
+        $conn = null;
+    } else {
+        echo "<script>alert('As senhas não coincidem!');</script>";
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -71,18 +80,20 @@ if (isset($_POST['entrar'])) {
     </form>
 
     <form action="index.php" method="POST" id="cadastro">
-      <input type="text" placeholder="Email" name='txtemail' required />
-      <i class="fas fa-envelope iEmail"></i>
-      <input type="password" placeholder="Password" required />
-      <i class="fas fa-lock senha"></i>
-      <input type="password" placeholder="Password" name='txtsenha' required />
-      <i class="fas fa-lock senha2"></i>
-      <div class="divCheck">
+    <input type="text" placeholder="Nome de Usuário" name='txtusuario' required />
+    <i class="fas fa-user iUser"></i>
+    <input type="text" placeholder="Email" name='txtemail' required />
+    <i class="fas fa-envelope iEmail"></i>
+    <input type="password" placeholder="Password" name='txtsenha' required />
+    <i class="fas fa-lock senha"></i>
+    <input type="password" placeholder="Confirme a Senha" name='txtsenha_confirm' required />
+    <i class="fas fa-lock senha2"></i>
+    <div class="divCheck">
         <input type="checkbox" required />
         <span>Aceitar termos de privacidade</span>
-      </div>
-      <button type="submit">Cadastre-se</button>
-    </form>
+    </div>
+    <button type="submit" name="btncadastro">Cadastre-se</button>
+</form>
   </div>
 
   <script src="login.js"></script>
