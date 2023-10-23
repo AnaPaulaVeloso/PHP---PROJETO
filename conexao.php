@@ -29,6 +29,8 @@ try{
             CONSTRAINT un_email unique(nm_email)
             );");
     }
+
+
 }catch(PDOException $e){
     echo "Connection Failed: " . $e->getMessage(); 
 }

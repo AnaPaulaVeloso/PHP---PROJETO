@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if (isset($_POST['login'])) {
+if (isset($_POST['entrar'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
@@ -22,6 +22,24 @@ if (isset($_POST['login'])) {
 }
 ?>
 
+
+<?php 
+  if (!empty($_POST['btncadastro'])){
+    $email = $_POST['txtemail'];
+    $senha = $_POST['txtsenha'];
+    try{
+      include 'conexao.php';
+      $sql = "INSERT INTO usuario(nm_usuario, nm_email, cd_senha)
+      VALUES ('$email', '$senha');";
+      $conn->exec($sql);
+      echo "<script>alert('Cadastrado com Sucesso!');</script>"; 
+    }catch(PDOException $e ){
+    echo $sql . "<br>" . $e->getMessage();
+  }
+  $conn = null;
+  }
+
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -52,12 +70,12 @@ if (isset($_POST['login'])) {
       <button type="submit">Entrar</button>
     </form>
 
-    <form action="login.php" method="POST" id="cadastro">
-      <input type="text" placeholder="Email" required />
+    <form action="index.php" method="POST" id="cadastro">
+      <input type="text" placeholder="Email" name='txtemail' required />
       <i class="fas fa-envelope iEmail"></i>
       <input type="password" placeholder="Password" required />
       <i class="fas fa-lock senha"></i>
-      <input type="password" placeholder="Password" required />
+      <input type="password" placeholder="Password" name='txtsenha' required />
       <i class="fas fa-lock senha2"></i>
       <div class="divCheck">
         <input type="checkbox" required />
