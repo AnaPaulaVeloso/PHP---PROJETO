@@ -102,8 +102,8 @@ if (isset($_POST['btnCadastro'])) {
       <input type="password" placeholder="Password" name="txtsenha_confirm" required />
       <i class="fas fa-lock senha2"></i>
       <div class="divCheck">
-        <input type="checkbox" required />
-        <span>Aceitar termos de privacidade</span>
+      <input type="checkbox" required />
+      <span>Aceitar termos de privacidade</span>
       </div>
       <button type="submit" name="btnCadastro">Cadastre-se</button>
     </form>
