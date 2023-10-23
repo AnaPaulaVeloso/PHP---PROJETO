@@ -12,6 +12,6 @@ document.querySelector('#btnEntrar')
 document.querySelector('#btnCadastro')
   .addEventListener('click', () => {
     formEntrar.style.left = "-450px"
-    formCadastro.style.left = "25px"
+    formCadastro.style.left = "155px"
     btnColor.style.left = "110px"
 })
