@@ -2,55 +2,74 @@
 session_start();
 
 if (isset($_POST['entrar'])) {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+  $email = $_POST['login'];
+  $password = $_POST['senha'];
 
-    // Verifique as credenciais do administrador (substitua isso pelo seu próprio sistema de autenticação)
-    if ($username === 'admin' && $password === 'senha') {
-        $_SESSION['admin'] = $username;
+
+  // Verifique as credenciais do administrador (substitua isso pelo seu próprio sistema de autenticação)
+  try {
+    include 'conexao.php';
+    $select = $conn->prepare("SELECT nm_email, cd_senha FROM usuario WHERE nm_email = '$email'");
+    $select->execute();
+
+    if ($select->rowCount() > 0) {
+      $usuario = $select->fetch();
+
+      if (password_verify($password, $usuario["cd_senha"])) {
 
         // Salve o nome do administrador em um cookie
         if (isset($_POST['remember'])) {
-            setcookie('admin_name', $username, time() + 30 * 60);
+          setcookie('admin_name', $email, time() + 30 * 60);
         }
+        
 
-        header("Location: admin.php");
-        exit;
-    } else {
+        $_SESSION["email"] = $usuario["nm_email"];
+
+        header("location:./admin.php");
+      } else {
         $error = "Credenciais inválidas";
+      }
     }
+
+
+
+
+    $conn = null;
+  } catch (Exception $e) {
+    echo $e->getMessage();
+  }
+  
 }
 ?>
 
 
-<?php 
-  if (isset($_POST['btncadastro'])) {
-    $usuario = $_POST['txtusuario'];
-    $email = $_POST['txtemail'];
-    $senha = $_POST['txtsenha'];
-    $senha_confirm = $_POST['txtsenha_confirm'];
+<?php
+if (isset($_POST['btnCadastro'])) {
+  include 'conexao.php';
+  $email = $_POST['txtemail'];
+  $senha = $_POST['txtsenha'];
+  $senha_confirm = $_POST['txtsenha_confirm'];
 
-    if ($senha === $senha_confirm) {
-        $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
+  if ($senha === $senha_confirm) {
+    $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
 
-        try {
-            include 'conexao.php';
-            $sql = "INSERT INTO usuario(nm_usuario, nm_email, cd_senha)
-                    VALUES (?, ?, ?);";
-            $stmt = $conn->prepare($sql);
-            $stmt->execute([$usuario, $email, $senha_hash]);
-            echo "<script>alert('Cadastrado com Sucesso!');</script>";
-        } catch (PDOException $e) {
-            echo $sql . "<br>" . $e->getMessage();
-        }
-        $conn = null;
-    } else {
-        echo "<script>alert('As senhas não coincidem!');</script>";
+    try {
+      include 'conexao.php';
+      $stmt = $conn->prepare("INSERT INTO usuario(nm_email, cd_senha) VALUES (?, ?)");
+      $stmt->execute([$email, $senha_hash]);
+      echo "<script>alert('Cadastrado com Sucesso!');</script>";
+    } catch (PDOException $e) {
+      echo $e->getMessage();
     }
+    $conn = null;
+  } else {
+    echo "<script>alert('As senhas não coincidem!');</script>";
+  }
 }
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -59,6 +78,7 @@ if (isset($_POST['entrar'])) {
   <link rel="stylesheet" href="style.css">
   <script src="https://kit.fontawesome.com/cf6fa412bd.js" crossorigin="anonymous"></script>
 </head>
+
 <body>
   <div class="container">
     <div class="buttonsForm">
@@ -68,34 +88,33 @@ if (isset($_POST['entrar'])) {
     </div>
 
     <form action="index.php" method="POST" id="entrar">
-      <input type="text" placeholder="Email" required />
+      <input type="text" placeholder="Email" required name="login"/>
       <i class="fas fa-envelope iEmail"></i>
-      <input type="password" placeholder="Password" required />
+      <input type="password" placeholder="Password" required name="senha" />
       <i class="fas fa-lock senha"></i>
       <div class="divCheck">
         <input type="checkbox" />
         <span>Lembrar Login</span>
       </div>
-      <button type="submit">Entrar</button>
+      <button type="submit" name="entrar">Entrar</button>
     </form>
 
     <form action="index.php" method="POST" id="cadastro">
-    <input type="text" placeholder="Nome de Usuário" name='txtusuario' required />
-    <i class="fas fa-user iUser"></i>
-    <input type="text" placeholder="Email" name='txtemail' required />
-    <i class="fas fa-envelope iEmail"></i>
-    <input type="password" placeholder="Password" name='txtsenha' required />
-    <i class="fas fa-lock senha"></i>
-    <input type="password" placeholder="Confirme a Senha" name='txtsenha_confirm' required />
-    <i class="fas fa-lock senha2"></i>
-    <div class="divCheck">
+      <input type="text" placeholder="Email" name="txtemail" required />
+      <i class="fas fa-envelope iEmail"></i>
+      <input type="password" placeholder="Password" name="txtsenha" required />
+      <i class="fas fa-lock senha"></i>
+      <input type="password" placeholder="Password" name="txtsenha_confirm" required />
+      <i class="fas fa-lock senha2"></i>
+      <div class="divCheck">
         <input type="checkbox" required />
         <span>Aceitar termos de privacidade</span>
-    </div>
-    <button type="submit" name="btncadastro">Cadastre-se</button>
-</form>
+      </div>
+      <button type="submit" name="btnCadastro">Cadastre-se</button>
+    </form>
   </div>
 
   <script src="login.js"></script>
 </body>
+
 </html>
