@@ -11,24 +11,19 @@ if (isset($_POST['entrar'])) {
     include 'conexao.php';
     $select = $conn->prepare("SELECT nm_email, cd_senha FROM usuario WHERE nm_email = '$email'");
     $select->execute();
+    
 
     if ($select->rowCount() > 0) {
       $usuario = $select->fetch();
-
-      if (password_verify($password, $usuario["cd_senha"])) {
-
+      
+     
+        
         // Salve o nome do administrador em um cookie
         if (isset($_POST['remember'])) {
           setcookie('admin_name', $email, time() + 30 * 60);
-        }
-        
-
-        $_SESSION["email"] = $usuario["nm_email"];
-
-        header("location:./admin.php");
-      } else {
-        $error = "Credenciais inválidas";
-      }
+          }
+          $_SESSION["email"] = $usuario["nm_email"];
+          header("location:./admin.php"); 
     }
 
 
@@ -51,12 +46,12 @@ if (isset($_POST['btnCadastro'])) {
   $senha_confirm = $_POST['txtsenha_confirm'];
 
   if ($senha === $senha_confirm) {
-    $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
+
 
     try {
       include 'conexao.php';
       $stmt = $conn->prepare("INSERT INTO usuario(nm_email, cd_senha) VALUES (?, ?)");
-      $stmt->execute([$email, $senha_hash]);
+      $stmt->execute([$email, $senha]);
       echo "<script>alert('Cadastrado com Sucesso!');</script>";
     } catch (PDOException $e) {
       echo $e->getMessage();

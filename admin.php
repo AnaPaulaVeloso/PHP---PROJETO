@@ -74,7 +74,7 @@ if(isset($message)){
 
   <?php
 
-   $select = mysqli_query($conn, "SELECT * FROM products");
+   $select = mysqli_query($conn, "SELECT * FROM produtos");
   
   ?>
   <div class="product-display">
